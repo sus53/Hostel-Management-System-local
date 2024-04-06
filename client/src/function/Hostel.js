@@ -18,6 +18,15 @@ export const getHostel = async (email) => {
     }
 }
 
+export const getAllHostel = async () => {
+    try {
+        const { data } = await api.GetAllHostel();
+        return data;
+    } catch (error) {
+        console.log(error.response.data)
+    }
+}
+
 export const getUnverifiedHostel = async () => {
     try {
         const { data } = await api.GetUnverifiedHostel();
