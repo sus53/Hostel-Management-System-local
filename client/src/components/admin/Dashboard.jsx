@@ -55,6 +55,7 @@ export const Dashboard = () => {
 
   const fetchHostelCounts = async () => {
     const hostels = await getAllHostel();
+    console.log(hostels)
     setCounts(prev => ({ ...prev, approved: 0, rejected: 0, pending: 0 }))
     hostels.forEach(hostel => {
       if (hostel.isApprove == "Approved")

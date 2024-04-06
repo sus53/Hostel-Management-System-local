@@ -13,6 +13,7 @@ const header = {
 
 export const GetVerifiedHostel = () => axios.get(URL + "/verified", header);
 export const GetUnverifiedHostel = () => axios.get(URL + "/unverified", header);
+export const GetAllHostel = () => axios.get(URL, header);
 export const AddHostel = (hostel) => axios.post(`${URL}/addhostel`, hostel);
 export const ApproveHostel = (hostel) =>
     axios.patch(`${URL}/${hostel._id}`, hostel, header);

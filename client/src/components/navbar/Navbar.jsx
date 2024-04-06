@@ -52,9 +52,15 @@ const Navbar = () => {
         searchRef.current.value = null;
         navigate("/hosteldetail");
     };
+    const checkUser = () => {
+        if (storage.user && storage.user.isAdmin == "true") {
+            navigate('/admin')
+        }
+    }
 
     useEffect(() => {
         fetchHostels();
+        checkUser();
         document.addEventListener("mousedown", handleClickOutside);
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);

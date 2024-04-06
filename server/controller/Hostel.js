@@ -20,6 +20,15 @@ export const GetVerifiedHostel = async (req, res) => {
   }
 };
 
+export const GetAllHostel = async (req, res) => {
+  try {
+    const hostel = await Hostel.find();
+    res.status(200).json(hostel);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+}
+
 export const GetHostel = async (req, res) => {
   const { email } = req.body;
   try {
