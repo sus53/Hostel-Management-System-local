@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import img1 from "../../assets/carousel/one.jpg";
 import "./Hosteldetail.scss";
-import { FilterHostel, getVerifiedHostel } from "../../function/Hostel";
+import { getVerifiedHostel } from "../../function/Hostel";
 import { useDispatch } from "react-redux";
 import { selectHostel } from "../../redux/Index";
 import StarIcon from "@mui/icons-material/Star";
 import HostelImg from "../../assets/img/HostelImg.jpg";
+import MultiRangeSlider from "multi-range-slider-react";
 
 export const Hostel = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [hostels, setHostels] = useState([]);
-    const [filter, setFilter] = useState({ price: 0 });
+    const [filteredHostels, setFilteredHostels] = useState([]);
+    const [filter, setFilter] = useState({});
+    const [isFilter, setIsFilter] = useState(false);
     const [hoverStar, setHoverStar] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -28,30 +30,62 @@ export const Hostel = () => {
         navigate("/hosteldetail");
     };
 
-    const filterHandler = async (e) => {
-        e.preventDefault();
-        const res = await FilterHostel(filter);
-        setHostels(res);
+    const filterHandler = () => {
+        // Filter hostels based on the filter state
+        let filteredHostels = hostels.filter(hostel => {
+            // Check if hostel matches selected gender
+            if (filter.sex && filter.sex.length > 0 && !filter.sex.includes(hostel.sex)) {
+                return false;
+            }
+
+            // Check if hostel matches selected bed types
+            if (filter.bed && filter.bed.length > 0) {
+                let matched = false;
+                for (let bedType of filter.bed) {
+                    if (Object.keys(hostel.floor).some(floor => Object.keys(hostel.floor[floor]).some(room => room === bedType))) {
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) {
+                    return false;
+                }
+            }
+
+            // Check if hostel matches selected price range
+            if (filter.minPrice && hostel.floor && Object.values(hostel.floor).some(floor => {
+                return Object.values(floor).some(room => {
+                    return room.price >= filter.minPrice && room.price <= filter.maxPrice;
+                });
+            })) {
+                return true;
+            }
+
+            // Return true for hostels that passed all filters
+            return true;
+        });
+        setIsFilter(true)
+        // Update the state with the filtered hostels
+        setFilteredHostels(filteredHostels);
+        console.log(filter)
+        console.log(filteredHostels)
     };
 
+
     const genderChangeHandler = (e) => {
-        {
-            if (filter.sex === e.target.value) {
-                setFilter({ ...filter, sex: "" });
-            } else {
-                setFilter({ ...filter, sex: e.target.value });
-            }
-        }
+        const { value, checked } = e.target;
+        setFilter(prevFilter => ({
+            ...prevFilter,
+            sex: checked ? [...(prevFilter.sex || []), value] : prevFilter.sex.filter(item => item !== value)
+        }));
     };
 
     const bedChangeHandler = (e) => {
-        {
-            if (filter.bed === e.target.value) {
-                setFilter({ ...filter, bed: "" });
-            } else {
-                setFilter({ ...filter, bed: e.target.value });
-            }
-        }
+        const { value, checked } = e.target;
+        setFilter(prevFilter => ({
+            ...prevFilter,
+            room: checked ? [...(prevFilter.room || []), value] : prevFilter.room.filter(item => item !== value)
+        }));
     };
 
     useEffect(() => {
@@ -61,10 +95,9 @@ export const Hostel = () => {
     const hostelsPerPage = 5;
     const indexOfLastHostel = currentPage * hostelsPerPage;
     const indexOfFirstHostel = indexOfLastHostel - hostelsPerPage;
-    const currentHostels = hostels.slice(indexOfFirstHostel, indexOfLastHostel);
+    const currentHostels = isFilter ? filteredHostels.slice(indexOfFirstHostel, indexOfLastHostel) : hostels.slice(indexOfFirstHostel, indexOfLastHostel);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-    console.log({ HostelImg });
     return (
         <>
             <div className="hostel-boys">
@@ -72,37 +105,38 @@ export const Hostel = () => {
                     <h3>Filter</h3>
                     <div className="filterGroup">
                         <label htmlFor="slider">Price: </label>
-                        <input
-                            type="range"
-                            name="slider"
-                            min="0"
-                            max="10000"
-                            value={filter.price}
-                            onChange={(e) =>
-                                setFilter({ ...filter, price: e.target.value })
-                            }
+                        <MultiRangeSlider
+                            style={{ border: "none", boxShadow: "none" }}
+                            ruler={false}
+                            min={0}
+                            max={10000}
+                            maxValue={10000}
+                            onInput={(e) => {
+                                setFilter(prev => ({ ...prev, minPrice: e.minValue, maxPrice: e.maxValue }));
+                            }}
                         />
-                        {filter.price}
+                        <div className="d-flex justify-content-between" >
+                            <div>min :  {filter.minPrice}</div>
+                            <div>max :  {filter.maxPrice}</div>
+                        </div>
                     </div>
                     <div className="filterGroupGender">
                         <label>Gender: </label>
                         <div className="genderGroup">
                             <div className="genderButtons">
                                 <input
-                                    type="radio"
-                                    name="sex"
+                                    type="checkbox"
                                     value="Boys"
-                                    checked={filter.sex === "Boys"}
+                                    checked={filter.sex?.includes("Boys")}
                                     onChange={(e) => genderChangeHandler(e)}
                                 />
                                 <label>Boys</label>
                             </div>
                             <div className="genderButtons">
                                 <input
-                                    type="radio"
-                                    name="sex"
+                                    type="checkbox"
                                     value="Girls"
-                                    checked={filter.sex === "Girls"}
+                                    checked={filter.sex?.includes("Girls")}
                                     onChange={(e) => genderChangeHandler(e)}
                                 />
                                 <label>Girls</label>
@@ -114,30 +148,27 @@ export const Hostel = () => {
                         <div className="genderGroup">
                             <div className="genderButtons">
                                 <input
-                                    type="radio"
-                                    name="bed"
+                                    type="checkbox"
                                     value="Single"
-                                    checked={filter.bed === "Single"}
+                                    checked={filter.bed?.includes("Single")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>One</label>
                             </div>
                             <div className="genderButtons">
                                 <input
-                                    type="radio"
-                                    name="bed"
+                                    type="checkbox"
                                     value="Double"
-                                    checked={filter.bed === "Double"}
+                                    checked={filter.bed?.includes("Double")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>Two</label>
                             </div>
                             <div className="genderButtons">
                                 <input
-                                    type="radio"
-                                    name="bed"
+                                    type="checkbox"
                                     value="Triple"
-                                    checked={filter.bed === "Triple"}
+                                    checked={filter.bed?.includes("Triple")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>Three</label>
