@@ -38,10 +38,10 @@ export const Hostel = () => {
                 return false;
             }
 
-            // Check if hostel matches selected bed types
-            if (filter.bed && filter.bed.length > 0) {
+            // Check if hostel matches selected room types
+            if (filter.room && filter.room.length > 0) {
                 let matched = false;
-                for (let bedType of filter.bed) {
+                for (let bedType of filter.room) {
                     if (Object.keys(hostel.floor).some(floor => Object.keys(hostel.floor[floor]).some(room => room === bedType))) {
                         matched = true;
                         break;
@@ -150,7 +150,7 @@ export const Hostel = () => {
                                 <input
                                     type="checkbox"
                                     value="Single"
-                                    checked={filter.bed?.includes("Single")}
+                                    checked={filter.room?.includes("Single")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>One</label>
@@ -159,7 +159,7 @@ export const Hostel = () => {
                                 <input
                                     type="checkbox"
                                     value="Double"
-                                    checked={filter.bed?.includes("Double")}
+                                    checked={filter.room?.includes("Double")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>Two</label>
@@ -168,7 +168,7 @@ export const Hostel = () => {
                                 <input
                                     type="checkbox"
                                     value="Triple"
-                                    checked={filter.bed?.includes("Triple")}
+                                    checked={filter.room?.includes("Triple")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>Three</label>

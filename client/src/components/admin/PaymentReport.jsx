@@ -21,6 +21,7 @@ function PaymentReport() {
                     <th>Owner Email</th>
                     <th>Check IN</th>
                     <th>Duration</th>
+                    <th>Total Price(Rs.)</th>
                 </tr>
                 {
                     payments && payments.map(payment => (
@@ -29,6 +30,7 @@ function PaymentReport() {
                             <td>{payment.email}</td>
                             <td>{payment.startingDate.slice(0, 10)}</td>
                             <td>{payment.duration}</td>
+                            <td>{payment.totalPrice}</td>
                         </tr>
                     ))
                 }
