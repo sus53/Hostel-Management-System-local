@@ -47,12 +47,12 @@ export const HostelDetail = () => {
         setSelectedImage(null);
     };
 
-    const switchSection = (section) => {
-        setActiveSection(section);
-    };
-
     const addReviewHandler = async (e) => {
         e.preventDefault();
+        if (review.review === "") {
+            toast.info("Please write a review");
+            return;
+        }
         if (!username) toast.info("Please login first to add review");
         const res = await AddHostelReview(review);
         if (!res.success) return;
@@ -324,10 +324,10 @@ export const HostelDetail = () => {
                                                 i < hoverStar ? "star" : ""
                                             }
                                             onClick={() =>
-                                                setReview({
-                                                    ...review,
+                                                setReview(prev => ({
+                                                    ...prev,
                                                     rating: i + 1,
-                                                })
+                                                }))
                                             }
                                             onMouseEnter={() =>
                                                 setHoverStar(i + 1)
