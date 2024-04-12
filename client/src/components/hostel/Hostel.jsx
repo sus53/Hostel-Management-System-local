@@ -133,7 +133,7 @@ export const Hostel = () => {
                             min={0}
                             max={15000}
                             maxValue={15000}
-                            onChange={(e) => {
+                            onInput={(e) => {
                                 setFilter(prev => ({ ...prev, minPrice: e.minValue, maxPrice: e.maxValue }));
                             }}
                         />
@@ -221,8 +221,8 @@ export const Hostel = () => {
                             <div className="genderButtons">
                                 <input
                                     type="checkbox"
-                                    value="Single"
-                                    checked={filter.room?.includes("Single")}
+                                    value="one"
+                                    checked={filter.room?.includes("one")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>One</label>
@@ -230,8 +230,8 @@ export const Hostel = () => {
                             <div className="genderButtons">
                                 <input
                                     type="checkbox"
-                                    value="Double"
-                                    checked={filter.room?.includes("Double")}
+                                    value="two"
+                                    checked={filter.room?.includes("two")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>Two</label>
@@ -239,11 +239,29 @@ export const Hostel = () => {
                             <div className="genderButtons">
                                 <input
                                     type="checkbox"
-                                    value="Triple"
-                                    checked={filter.room?.includes("Triple")}
+                                    value="three"
+                                    checked={filter.room?.includes("three")}
                                     onChange={(e) => bedChangeHandler(e)}
                                 />
                                 <label>Three</label>
+                            </div>
+                            <div className="genderButtons">
+                                <input
+                                    type="checkbox"
+                                    value="four"
+                                    checked={filter.room?.includes("four")}
+                                    onChange={(e) => bedChangeHandler(e)}
+                                />
+                                <label>Four</label>
+                            </div>
+                            <div className="genderButtons">
+                                <input
+                                    type="checkbox"
+                                    value="five"
+                                    checked={filter.room?.includes("five")}
+                                    onChange={(e) => bedChangeHandler(e)}
+                                />
+                                <label>Five</label>
                             </div>
                         </div>
                     </div>
