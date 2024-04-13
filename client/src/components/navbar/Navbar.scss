@@ -46,7 +46,7 @@ nav {
         }
     }
 
-    > .search {
+    >.search {
         max-width: 20rem;
         width: 100%;
         display: flex;
@@ -55,7 +55,7 @@ nav {
         height: 2.5rem;
         background-color: none;
 
-        > input {
+        >input {
             width: 95%;
             height: 100%;
             border-radius: 6px;
@@ -66,7 +66,7 @@ nav {
             font-family: inherit;
         }
 
-        > button {
+        >button {
             position: absolute;
             right: 0;
             background-color: var(--main-bg);
@@ -79,7 +79,7 @@ nav {
             z-index: 2;
         }
 
-        > .search-results {
+        >.search-results {
             position: absolute;
             background-color: white;
             box-shadow: 0px 2px 4px 0px #999;
@@ -92,29 +92,33 @@ nav {
             z-index: 1;
             border-radius: 0.8rem;
 
-            > .item:not(:nth-last-child) {
+            >.item:not(:nth-last-child) {
                 border-bottom: 1px solid #ddd;
             }
 
-            > .item {
+            >.item {
                 background-color: white;
                 height: 4rem;
                 width: 100%;
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
                 transition: 200ms all;
                 border-radius: 0.8rem;
                 padding: 1rem;
                 cursor: pointer;
+
+                >img {
+                    margin-right: 1rem;
+                }
             }
 
-            > .item:hover {
-                background-color: #eee;
+            >.item:hover {
+                transform: scale(1.02);
+                background-color: #f1f1f1;
             }
         }
 
-        > .adv-search {
+        >.adv-search {
             position: fixed;
             background-color: hsla(0, 0%, 0%, 0.5);
             width: 100%;
@@ -187,13 +191,14 @@ nav {
                 background-color: none;
                 border: none;
 
-                > .link {
+                >.link {
                     background-color: #8362e6;
                     color: white;
                     font-size: 16px;
                 }
             }
         }
+
         .link.active {
             color: var(--purple-color);
             font-weight: bold;

@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const HostelSchema = new mongoose.Schema({
     title: {
         type: String,
-        require: true
+        require: true,
+        unique: true
     },
     description: {
         type: String,

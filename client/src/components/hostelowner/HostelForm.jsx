@@ -49,13 +49,48 @@ function HostelForm({ formToggler, setHostel, hostel }) {
     });
   };
 
+  const validationHandler = () => {
+    if (!hostel.title) {
+      toast.error("Hostel title is required");
+      return false;
+    }
+    if (!hostel.sex) {
+      toast.error("Hostel gender is required");
+      return false;
+    }
+    if (!hostel.location) {
+      toast.error("Hostel location is required");
+      return false;
+    }
+    if (!hostel.latlng) {
+      toast.error("Hostel location is required");
+      return false;
+    }
+    if (!hostel.description) {
+      toast.error("Hostel description is required");
+      return false;
+    }
+    if (!hostel.floor) {
+      toast.error("Hostel room is required");
+      return false;
+    }
+    return true;
+  }
+
+  const ValueChecker = (e) => {
+    if (e.target.value === "") {
+      e.target.value = "";
+    }
+
+  }
+
   const addHostelHandler = async (e) => {
     e.preventDefault();
+    if (!validationHandler()) return;
     const formData = new FormData();
-    formData.append("id", +hostel._id);
+    formData.append("_id", hostel._id || "");
     formData.append("title", hostel.title);
     formData.append("description", hostel.description);
-    formData.append("price", hostel.price);
     formData.append("location", hostel.location);
     formData.append("sex", hostel.sex);
     formData.append("floor", JSON.stringify(hostel.floor));
@@ -243,7 +278,7 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                             ...hostel.floor?.[i + 1],
                             ["one"]: {
                               ...hostel.floor?.[i + 1]?.["one"],
-                              price: e.target.value,
+                              price: ValueChecker(e),
                             },
                           },
                         },
@@ -279,7 +314,7 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                             ...hostel.floor?.[i + 1],
                             ["two"]: {
                               ...hostel.floor[i + 1]["two"],
-                              price: e.target.value,
+                              price: ValueChecker(e),
                             },
                           },
                         },
@@ -315,7 +350,7 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                             ...hostel.floor?.[i + 1],
                             ["three"]: {
                               ...hostel.floor[i + 1]["three"],
-                              price: e.target.value,
+                              price: ValueChecker(e),
                             },
                           },
                         },
@@ -351,7 +386,7 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                             ...hostel.floor?.[i + 1],
                             ["four"]: {
                               ...hostel.floor[i + 1]["four"],
-                              price: e.target.value,
+                              price: ValueChecker(e),
                             },
                           },
                         },

@@ -16,8 +16,21 @@ export const ManageUser = () => {
         setEditSectionVisible(!isEditSectionVisible);
     };
 
+    const validationChecker = () => {
+        if (!user.username) {
+            toast.error("Please enter username");
+            return false;
+        }
+
+        if (!user.email) {
+            toast.error("Please enter email");
+            return false;
+        }
+    }
+
     const editUserHandler = async (e) => {
         e.preventDefault();
+        if (!validationChecker()) return;
         const res = await EditUser(user);
         if (!res.success) return;
         toast.success(res.message);

@@ -90,6 +90,7 @@ const Navbar = () => {
                                         HostelNavigateHandler(hostel)
                                     }
                                 >
+                                    <img width={50} src={`http://localhost:5000/assets/${hostel.imagepath1}`} />
                                     {hostel.title}
                                 </div>
                             ))}

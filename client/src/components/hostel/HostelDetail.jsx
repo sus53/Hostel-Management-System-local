@@ -49,13 +49,15 @@ export const HostelDetail = () => {
 
     const addReviewHandler = async (e) => {
         e.preventDefault();
-        if (review.review === "") {
-            toast.info("Please write a review");
+        console.log(review.review.length)
+        if (review.review.length < 10) {
+            toast.info("Review must be at least 10 characters long");
             return;
         }
         if (!username) toast.info("Please login first to add review");
         const res = await AddHostelReview(review);
         if (!res.success) return;
+        toast.success("Review Added");
         setReview({ username, hostel: hostel.title, rating: 1, review: "" });
         setHoverStar(1);
         getReviews();
@@ -79,7 +81,8 @@ export const HostelDetail = () => {
     const verifyPayment = async () => {
         !username && navigate("/login");
         dispatch(selectBooking({ booking }));
-        console.log(booking)
+        if (!booking.duration) return toast.error("Please select a duration");
+        if (!booking.startingDate) return toast.error("Please select a date");
         const res = await VerifyPayment({
             ...booking,
         });

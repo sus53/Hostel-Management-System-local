@@ -46,7 +46,6 @@ export const AddHostel = async (req, res) => {
     _id,
     title,
     description,
-    price,
     location,
     sex,
     imagepath1,
@@ -62,7 +61,6 @@ export const AddHostel = async (req, res) => {
         const updatedHostel = await Hostel.findByIdAndUpdate(hostel._id, {
           title,
           description,
-          price,
           location,
           sex,
           imagepath1,
@@ -85,7 +83,6 @@ export const AddHostel = async (req, res) => {
     const newHostel = new Hostel({
       title,
       description,
-      price,
       location,
       sex,
       imagepath1,
