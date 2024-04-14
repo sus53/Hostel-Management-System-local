@@ -24,8 +24,7 @@ export const Signup = () => {
     // Define validation regex patterns
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernamePattern = /^[a-zA-Z0-9_]{3,}$/;
-    const passwordPattern = /^(?=.[!@#$%^&])[a-zA-Z0-9!@#$%^&*]{6,}$/;
-    const mobileNumberPattern = /^\d{10}$/;
+    const passwordPattern = /^(?=.*[!@#$%^&])[a-zA-Z0-9!@#$%^&*]{6,}$/;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -38,28 +37,28 @@ export const Signup = () => {
     const SignupHandler = async (e) => {
         e.preventDefault();
 
-        // if (!emailPattern.test(user.email)) {
-        //   setResponse("Please enter a valid email address.");
-        //   return;
-        // }
+        if (!emailPattern.test(user.email)) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
 
-        // if (!usernamePattern.test(user.username)) {
-        //   setResponse("Username must be at least 3 characters long and can only contain letters, numbers, and underscores.");
-        //   return;
-        // }
+        if (!usernamePattern.test(user.username)) {
+            toast.error("Username must be at least 3 characters long and can only contain letters, numbers, and underscores.");
+            return;
+        }
 
-        // if (!passwordPattern.test(user.password)) {
-        //   setResponse("Password must be at least 6 characters long and contain at least one special character.");
-        //   return;
-        // }
+        if (!passwordPattern.test(user.password)) {
+            toast.error("Password must be at least 6 characters long and contain at least one special character.");
+            return;
+        }
 
-        // if (!mobileNumberPattern.test(user.mobilenumber)) {
-        //   setResponse("Please enter a valid 10-digit mobile number.");
-        //   return;
-        // }
+        if (!user.sex) {
+            toast.error("Please select your gender");
+            return;
+        }
 
         const res = await SignupUser(user);
-        setResponse(res.message);
+
 
         if (res.message === "User Registered sucessfully") {
             dispatch(setLogin({ user: res.user }));
@@ -160,6 +159,7 @@ export const Signup = () => {
                                 value={user.mobilenumber}
                                 required="required"
                                 onChange={handleChange}
+                                placeholder="Optional"
                             />
                         </div>
                         <div className="inputBox">

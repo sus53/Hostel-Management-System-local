@@ -31,7 +31,8 @@ function HostelForm({ formToggler, setHostel, hostel }) {
     } else {
       const updatedFloor = { ...hostel.floor };
       delete updatedFloor[i][floorName];
-      if (Object.keys(updatedFloor[i]).length === 0) delete updatedFloor[i];
+      if (Object.keys(updatedFloor[i]).length === 0)
+        delete updatedFloor[i];
       setHostel({ ...hostel, floor: updatedFloor });
     }
   };
@@ -75,17 +76,19 @@ function HostelForm({ formToggler, setHostel, hostel }) {
       return false;
     }
     return true;
-  }
+  };
 
   const ValueChecker = (e) => {
-    if (e.target.value === "") {
+    if (e.target.value === "" || [...e.target.value].includes("-")) {
       e.target.value = "";
+      return false;
     }
-
-  }
+    return true;
+  };
 
   const addHostelHandler = async (e) => {
     e.preventDefault();
+    console.log(hostel);
     if (!validationHandler()) return;
     const formData = new FormData();
     formData.append("_id", hostel._id || "");
@@ -99,12 +102,24 @@ function HostelForm({ formToggler, setHostel, hostel }) {
 
     if (hostel.images) {
       Object.keys(hostel.images).map((e, i) => {
-        formData.append("image", hostel.images?.[`imagepath${i}`]?.image);
+        formData.append(
+          "image",
+          hostel.images?.[`imagepath${i + 1}`]?.image
+        );
       });
 
-      formData.append("imagepath1", hostel.images?.[`imagepath${1}`]?.name);
-      formData.append("imagepath2", hostel.images?.[`imagepath${2}`]?.name);
-      formData.append("imagepath3", hostel.images?.[`imagepath${3}`]?.name);
+      formData.append(
+        "imagepath1",
+        hostel.images?.[`imagepath${1}`]?.name
+      );
+      formData.append(
+        "imagepath2",
+        hostel.images?.[`imagepath${2}`]?.name
+      );
+      formData.append(
+        "imagepath3",
+        hostel.images?.[`imagepath${3}`]?.name
+      );
     }
     const res = await AddHostel(formData);
     if (!res.success) return toast.error(res.message);
@@ -131,14 +146,22 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                 className="form-control "
                 value={hostel.title}
                 onChange={(e) =>
-                  setHostel({ ...hostel, title: e.target.value })
+                  setHostel({
+                    ...hostel,
+                    title: e.target.value,
+                  })
                 }
               />
             </div>
             <div>
               <label>Sex</label>
               <select
-                onChange={(e) => setHostel({ ...hostel, sex: e.target.value })}
+                onChange={(e) =>
+                  setHostel({
+                    ...hostel,
+                    sex: e.target.value,
+                  })
+                }
                 className="form-control"
               >
                 <option value="">---------</option>
@@ -162,7 +185,9 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                 className={`btn btn-primary w-35 mt-2 ${imageNum === 3 ? "d-none" : ""
                   } `}
                 onClick={() =>
-                  setImageNum((prev) => (imageNum < 3 ? imageNum + 1 : prev))
+                  setImageNum((prev) =>
+                    imageNum < 3 ? imageNum + 1 : prev
+                  )
                 }
               >
                 {" "}
@@ -172,8 +197,13 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                 <button
                   className="btn btn-light w-25 mt-2 d-inline-block "
                   onClick={() => {
-                    setImageNum((prev) => (prev === 1 ? 1 : prev - 1));
-                    setHostel({ ...hostel, image: hostel.image.slice(0, -1) });
+                    setImageNum((prev) =>
+                      prev === 1 ? 1 : prev - 1
+                    );
+                    setHostel({
+                      ...hostel,
+                      image: hostel.image.slice(0, -1),
+                    });
                   }}
                 >
                   <DeleteIcon />
@@ -185,9 +215,15 @@ function HostelForm({ formToggler, setHostel, hostel }) {
             <div>
               <label>Location</label>
               <div>
-                <button onClick={() => mapToggler()} className="btn btn-light">
+                <button
+                  onClick={() => mapToggler()}
+                  className="btn btn-light"
+                >
                   {hostel.location
-                    ? hostel.location.split(",").slice(0, -2).join(",")
+                    ? hostel.location
+                      .split(",")
+                      .slice(0, -2)
+                      .join(",")
                     : "Choose Location"}
                 </button>
               </div>
@@ -199,7 +235,10 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                 className="form-control"
                 cols="110"
                 onChange={(e) =>
-                  setHostel({ ...hostel, description: e.target.value })
+                  setHostel({
+                    ...hostel,
+                    description: e.target.value,
+                  })
                 }
               />
             </div>
@@ -207,7 +246,9 @@ function HostelForm({ formToggler, setHostel, hostel }) {
           <div className="overflow-y-scroll overflow-x-hidden">
             {[...Array(floorNum)].map((a, i) => (
               <container className=" py-2 " key={i + 1}>
-                <label className=" w-100 text-center my-2">Floor {i + 1}</label>
+                <label className=" w-100 text-center my-2">
+                  Floor {i + 1}
+                </label>
                 <div className="d-flex flex-row justify-content-between ">
                   <button
                     className={`me-1 w-25 btn ${hostel.floor &&
@@ -216,7 +257,9 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                       ? "btn-success"
                       : "btn-light"
                       }`}
-                    onClick={() => floorHandler(i + 1, "one")}
+                    onClick={() =>
+                      floorHandler(i + 1, "one")
+                    }
                   >
                     1 Seater
                   </button>
@@ -227,7 +270,9 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                       ? "btn-success"
                       : "btn-light"
                       }`}
-                    onClick={() => floorHandler(i + 1, "two")}
+                    onClick={() =>
+                      floorHandler(i + 1, "two")
+                    }
                   >
                     2 Seater
                   </button>
@@ -238,7 +283,9 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                       ? "btn-success"
                       : "btn-light"
                       }`}
-                    onClick={() => floorHandler(i + 1, "three")}
+                    onClick={() =>
+                      floorHandler(i + 1, "three")
+                    }
                   >
                     3 Seater
                   </button>
@@ -249,7 +296,9 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                       ? "btn-success"
                       : "btn-light"
                       }`}
-                    onClick={() => floorHandler(i + 1, "four")}
+                    onClick={() =>
+                      floorHandler(i + 1, "four")
+                    }
                   >
                     4 Seater
                   </button>
@@ -266,7 +315,8 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                         hostel.floor[i + 1]["one"]
                         ? hostel.floor &&
                         hostel.floor[i + 1] &&
-                        hostel.floor[i + 1]["one"]?.price
+                        hostel.floor[i + 1]["one"]
+                          ?.price
                         : ""
                     }
                     onChange={(e) =>
@@ -275,10 +325,18 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                         floor: {
                           ...hostel.floor,
                           [i + 1]: {
-                            ...hostel.floor?.[i + 1],
+                            ...hostel.floor?.[
+                            i + 1
+                            ],
                             ["one"]: {
-                              ...hostel.floor?.[i + 1]?.["one"],
-                              price: ValueChecker(e),
+                              ...hostel.floor?.[
+                              i + 1
+                              ]?.["one"],
+                              price:
+                                ValueChecker(
+                                  e
+                                ) &&
+                                e.target.value,
                             },
                           },
                         },
@@ -302,7 +360,8 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                         hostel.floor[i + 1]["two"]
                         ? hostel.floor &&
                         hostel.floor[i + 1] &&
-                        hostel.floor[i + 1]["two"]?.price
+                        hostel.floor[i + 1]["two"]
+                          ?.price
                         : ""
                     }
                     onChange={(e) =>
@@ -311,10 +370,18 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                         floor: {
                           ...hostel.floor,
                           [i + 1]: {
-                            ...hostel.floor?.[i + 1],
+                            ...hostel.floor?.[
+                            i + 1
+                            ],
                             ["two"]: {
-                              ...hostel.floor[i + 1]["two"],
-                              price: ValueChecker(e),
+                              ...hostel.floor[
+                              i + 1
+                              ]["two"],
+                              price:
+                                ValueChecker(
+                                  e
+                                ) &&
+                                e.target.value,
                             },
                           },
                         },
@@ -338,7 +405,8 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                         hostel.floor[i + 1]["three"]
                         ? hostel.floor &&
                         hostel.floor[i + 1] &&
-                        hostel.floor[i + 1]["three"]?.price
+                        hostel.floor[i + 1]["three"]
+                          ?.price
                         : ""
                     }
                     onChange={(e) =>
@@ -347,10 +415,18 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                         floor: {
                           ...hostel.floor,
                           [i + 1]: {
-                            ...hostel.floor?.[i + 1],
+                            ...hostel.floor?.[
+                            i + 1
+                            ],
                             ["three"]: {
-                              ...hostel.floor[i + 1]["three"],
-                              price: ValueChecker(e),
+                              ...hostel.floor[
+                              i + 1
+                              ]["three"],
+                              price:
+                                ValueChecker(
+                                  e
+                                ) &&
+                                e.target.value,
                             },
                           },
                         },
@@ -374,7 +450,8 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                         hostel.floor[i + 1]["four"]
                         ? hostel.floor &&
                         hostel.floor[i + 1] &&
-                        hostel.floor[i + 1]["four"]?.price
+                        hostel.floor[i + 1]["four"]
+                          ?.price
                         : ""
                     }
                     onChange={(e) =>
@@ -383,10 +460,18 @@ function HostelForm({ formToggler, setHostel, hostel }) {
                         floor: {
                           ...hostel.floor,
                           [i + 1]: {
-                            ...hostel.floor?.[i + 1],
+                            ...hostel.floor?.[
+                            i + 1
+                            ],
                             ["four"]: {
-                              ...hostel.floor[i + 1]["four"],
-                              price: ValueChecker(e),
+                              ...hostel.floor[
+                              i + 1
+                              ]["four"],
+                              price:
+                                ValueChecker(
+                                  e
+                                ) &&
+                                e.target.value,
                             },
                           },
                         },

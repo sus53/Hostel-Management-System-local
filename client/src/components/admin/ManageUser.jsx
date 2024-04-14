@@ -26,6 +26,7 @@ export const ManageUser = () => {
             toast.error("Please enter email");
             return false;
         }
+        return true;
     }
 
     const editUserHandler = async (e) => {
