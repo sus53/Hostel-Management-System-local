@@ -52,7 +52,7 @@ export const Signup = () => {
             return;
         }
 
-        if (!user.sex) {
+        if (!user.gender) {
             toast.error("Please select your gender");
             return;
         }
